@@ -1,5 +1,5 @@
 # This Dockerfile uses `serve` npm package to serve the static files with node process.
-# You can find the Dockerfile for nginx in the following link:
+# You can find the Dockerfile for nginx in the link below: 
 # https://github.com/refinedev/dockerfiles/blob/main/vite/Dockerfile.nginx
 FROM refinedev/node:18 AS base
 
