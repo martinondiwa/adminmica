@@ -39,12 +39,8 @@ import {
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
+//import { authProvider } from "./providers/auth";
 
-const API_URL = "https://api.nestjs-query.refine.dev/graphql";
-const WS_URL = "wss://api.nestjs-query.refine.dev/graphql";
-
-const gqlClient = new GraphQLClient(API_URL);
-const wsClient = createClient({ url: WS_URL });
 
 function App() {
   return (
@@ -59,7 +55,7 @@ function App() {
                 liveProvider={liveProvider(wsClient)}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerProvider}
-              
+               // authProvider={}
                 resources={[
                   {
                     name: "blog_posts",
@@ -149,7 +145,8 @@ function App() {
               <DevtoolsPanel />
             </DevtoolsProvider>
           </AntdApp>
-       
+        
+      </RefineKbarProvider>
     </BrowserRouter>
   );
 }
