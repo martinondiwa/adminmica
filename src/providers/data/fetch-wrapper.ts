@@ -7,7 +7,19 @@ const customFetch = async (url: string, options: RequestInit) => {
         ...options,
         headers: {
             ...headers,
-            Authorization: 'Bearer $ {accessToken}'
+            Authorization:headers?.Authorization || 'Bearer $ {accessToken}',
+            "Content-Type": "application/json", 
+            "Apollo-Require-Preflight": "true",
         }
     })
+}
+
+const getGraphQLErrors = (body: Record<"errors", GraphQLFormattedError[] | undefined>):
+Error | null => {
+    if (!body) {
+        return {
+            message: 'Unknown error',
+            statusCode: "INTERNAL_SERVER_ERROR"
+        }
+    }
 }
