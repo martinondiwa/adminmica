@@ -33,7 +33,8 @@ if ("errors" in body) {
    const code = errors?.[0]?.extensions?.code;
 
    return{
-    message: messages | JSON.stringify(errors)
+    message: messages | JSON.stringify(errors),
+    statusCode: code || 500
    }
 }
 }
