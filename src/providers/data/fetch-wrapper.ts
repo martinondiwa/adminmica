@@ -1,3 +1,5 @@
+
+
 const customFetch = async (url: string, options: RequestInit) => {
     const accessToken = localStorage.getItem('access_token');
 
@@ -22,4 +24,9 @@ Error | null => {
             statusCode: "INTERNAL_SERVER_ERROR"
         }
     }
+
+
+if ("errors" in body) {
+   const errors = body?.errors; 
+}
 }
