@@ -28,5 +28,12 @@ Error | null => {
 
 if ("errors" in body) {
    const errors = body?.errors; 
+
+   const messages = errors?.map((error)=> error?.message)?.join("");
+   const code = errors?.[0]?.extensions?.code;
+
+   return{
+    message: messages | JSON.stringify(errors)
+   }
 }
 }
