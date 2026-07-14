@@ -93,7 +93,7 @@ function App() {
                         fallback={<CatchAllNavigate to="/login" />}
                       >
                         <ThemedLayout
-                          Header={Header}
+                          //Header={Header}
                           Sider={(props) => <ThemedSider {...props} fixed />}
                         >
                           <Outlet />
