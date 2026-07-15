@@ -10,10 +10,7 @@ import {
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
-import dataProvider, {
-  GraphQLClient,
-  liveProvider,
-} from "@refinedev/nestjs-query";
+import {dataProvider, liveProvider} from "./providers"
 import routerProvider, {
   CatchAllNavigate,
   DocumentTitleHandler,
@@ -51,8 +48,8 @@ function App() {
           <AntdApp>
             <DevtoolsProvider>
               <Refine
-               dataProvider={dataProvider(gqlClient)}
-                liveProvider={liveProvider(wsClient)}
+               dataProvider={dataProvider}
+                liveProvider={liveProvider}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerProvider}
                // authProvider={}
