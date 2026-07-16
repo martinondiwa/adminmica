@@ -81,14 +81,25 @@ export const authProvider: AuthBindings = {
                 headers: {},
                 meta:{
                     rawQuery: `
-                    query Me {
-                        me {
-                            name
+                        query Me {
+                            me {
+                                name
+                            }
                         }
-                    }
                     `,
-                }
-            })
+                },
+            });
+            //if the user is authenticated, redirect to the home page
+            return {
+                authenticated: true,
+                redirectTo: "/",
+            };
+        } catch (error) {
+            //for any other error, redirect to the login page
+            return {
+                authenticated: false,
+                redirectTo: "/login",
+            };
         }
-    }
+    },
 };
