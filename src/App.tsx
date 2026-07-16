@@ -11,7 +11,7 @@ import {
 import "@refinedev/antd/dist/reset.css";
 
 import {authProvider, dataProvider, liveProvider} from "./providers";
-import {Home} from "./pages";
+import {Home, forgotPassword, login, register} from "./pages";
 
 
 import routerProvider, {
@@ -88,6 +88,9 @@ function App() {
                 <Routes>
                <Route index element ={<WelcomePage/>}/>
                <Route index element={<Home/>}/>
+               <Route index element={<forgotPassword/>}/>
+               <Route index element={<Register/>}/>
+               <Route index element={<Login/>}/>
                 </Routes>
 
                 <RefineKbar />
