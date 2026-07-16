@@ -117,9 +117,25 @@ export const authProvider: AuthBindings = {
                      }
                 : {},
             meta: {
-                //
-            }
-            })
+                //get the user information such as name, email, etc
+                rawQuery: `
+                    query Me {
+                        me {
+                            id 
+                            name 
+                            email
+                            phone
+                            jobTitle
+                            timezone
+                            avatarUrl
+                        }
+                    }
+                `,
+            },
+            });
+         return data.me;
+        } catch(error) {
+            return undefined;
         }
-    }
+    },
 };
