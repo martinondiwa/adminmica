@@ -1,8 +1,8 @@
 import React from 'react'
 
-export const index = () => {
+export const Home = () => {
   return (
-    <div>
+    <div >
       Home
     </div>
   )
