@@ -10,7 +10,10 @@ import {
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
-import {authProvider, dataProvider, liveProvider} from "./providers"
+import {authProvider, dataProvider, liveProvider} from "./providers";
+import {Home} from "./pages";
+
+
 import routerProvider, {
   CatchAllNavigate,
   DocumentTitleHandler,
@@ -36,7 +39,7 @@ import {
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
-//import { authProvider } from "./providers/auth";
+
 
 
 function App() {
