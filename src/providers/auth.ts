@@ -111,9 +111,14 @@ export const authProvider: AuthBindings = {
                 url: API_URL,
                 method: "post",
                 headers: accessToken
-                ? {
-                    
-                }
+                ?  {
+                     //send the access tokenToken in the authorization header
+                     Authorization: `Bearer ${accessToken}`,
+                     }
+                : {},
+            meta: {
+                //
+            }
             })
         }
     }
