@@ -70,4 +70,25 @@ export const authProvider: AuthBindings = {
         }
         return {error};
     },
+     //used to get the identity of the user
+     //this is to know if the user is authenticated or not
+    check: async () => {
+        try {
+
+            await dataProvider.custom({
+                url: API_URL,
+                method: "post",
+                headers: {},
+                meta:{
+                    rawQuery: `
+                    query Me {
+                        me {
+                            name
+                        }
+                    }
+                    `,
+                }
+            })
+        }
+    }
 };
