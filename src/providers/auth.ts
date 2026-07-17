@@ -31,7 +31,7 @@ export const authProvider: AuthBindings = {
                 },
             });
             //save the accessToken in localStorage
-            localStorage.setItem("access_token", data.login.accessToken);
+            localStorage.setItem("access_token", data.Login.accessToken);
 
             return {
                 success: true,

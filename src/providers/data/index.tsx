@@ -4,9 +4,9 @@ import graphqlDataProvider, { GraphQLClient,
 import { fetchWrapper } from "./fetch-wrapper";
 import { createClient } from "graphql-ws";
 
-export const API_BASE_URL = 'https://api.crm.refine.dev'
-export const API_URL = '${API_BASE_URL}/graphql'
-export const WS_URL = 'wss://api.crm.refine.dev/graphql'
+export const API_BASE_URL = `https://api.crm.refine.dev`
+export const API_URL = `${API_BASE_URL}/graphql`
+export const WS_URL = `wss://api.crm.refine.dev/graphql`
 
 export const client = new GraphQLClient(API_URL, { 
     fetch: (url: string, options: RequestInit) => {
@@ -26,7 +26,7 @@ export const wsClient = typeof window !== "undefined"
 
             return {
                 headers: {
-                    Authorization: `Bearer $ {accessToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                 }
             }
         }
@@ -34,4 +34,6 @@ export const wsClient = typeof window !== "undefined"
     :undefined
 
     export const dataProvider = graphqlDataProvider(client);
-    export const liveProvider = wsClient? graphqlDataProvider(wsClient) : undefined;
+    export const liveProvider = wsClient
+    ? graphqlLiveProvider(wsClient)
+    : undefined;
