@@ -111,7 +111,7 @@ function App() {
               }}
             >
               <Routes>
-                <Route path="/Home"  element={<Home />} />
+     
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/register" element={<Register />}
                 />
@@ -121,12 +121,13 @@ function App() {
                     <Authenticated
                       key="authenticated-layout"
                       fallback={< CatchAllNavigate to="/login"/>}
-                    >
+                >
                    <Layout>
                     <Outlet/>
                   </Layout> 
                </Authenticated>
                }>
+                 <Route path="/Home"  element={<Home />} />
                 <Route/>
               </Routes>
 
