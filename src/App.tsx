@@ -109,7 +109,8 @@ function App() {
               }}
             >
               <Routes>
-                <Route index element={<Home />} />
+                <Route index element={<WelcomePage />} />
+                <Route path="/Home"  element={<Home />} />
                 <Route
                   path="/forgot-password"
                   element={<ForgotPassword />}
