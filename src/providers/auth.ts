@@ -7,52 +7,66 @@ import { message } from "antd";
 
 //For demo purposes
 export const authCredentials = {
-  email: "ondiwamartin@gmail.com",
+  email: "demo@refine.dev",
   password: "demodemo",
 };
 
 export const authProvider: AuthBindings = {
-    login: async ({email}) => {
+    login: async ({ email, password }) => {
         try {
-            //call the login mutation
-            const {data} = await dataProvider.custom({
-                url:API_URL,
+            const { data } = await dataProvider.custom({
+                url: API_URL,
                 method: "post",
-                headers:{},
+                headers: {},
                 meta: {
-                    variables: {email},
+                    variables: {
+                        email,
+                    },
                     rawQuery: `
-                    mutation Login($email: String!) {
-                        Login(loginInput: {email:$email}) {
-                            accessToken
+                        mutation Login($email: String!) {
+                            login(
+                                loginInput: {
+                                    email: $email
+                                }
+                            ) {
+                                accessToken
+                            }
                         }
-                     }
-                    `, 
+                    `,
                 },
             });
-            //save the accessToken in localStorage
-            localStorage.setItem("access_token", data.Login.accessToken);
+
+            localStorage.setItem(
+                "access_token",
+                data.login.accessToken
+            );
 
             return {
                 success: true,
-                redirectTo:"/",
+                redirectTo: "/",
             };
         } catch (e) {
-                const error = e as Error;
+            const error = e as Error;
 
-                return {
-                    success: false,
-                    error:{
-                        message: "message" in error ? error.message : "Login failed",
-                        name: "name" in error ? error.name : "Invalid email or password",
-                    },
-                };
-            }
+            return {
+                success: false,
+                error: {
+                    message:
+                        "message" in error
+                            ? error.message
+                            : "Login failed",
+                    name:
+                        "name" in error
+                            ? error.name
+                            : "Invalid email or password",
+                },
+            };
+        }
     },
     //Simply remove the accessToken from localStorage for the logout
     logout: async () => {
         localStorage.removeItem("access_token");
-        
+
         return {
             success: true,
             redirectTo: "/login",
@@ -68,18 +82,19 @@ export const authProvider: AuthBindings = {
                 ...error,
             };
         }
-        return {error};
+
+        return { error };
     },
-     //used to get the identity of the user
-     //this is to know if the user is authenticated or not
+
+    //used to get the identity of the user
+    //this is to know if the user is authenticated or not
     check: async () => {
         try {
-
             await dataProvider.custom({
                 url: API_URL,
                 method: "post",
                 headers: {},
-                meta:{
+                meta: {
                     rawQuery: `
                         query Me {
                             me {
@@ -89,11 +104,13 @@ export const authProvider: AuthBindings = {
                     `,
                 },
             });
+
             //if the user is authenticated, redirect to the home page
             return {
                 authenticated: true,
                 redirectTo: "/",
             };
+
         } catch (error) {
             //for any other error, redirect to the login page
             return {
@@ -102,39 +119,42 @@ export const authProvider: AuthBindings = {
             };
         }
     },
+
     //get the user information
     getIdentity: async () => {
         const accessToken = localStorage.getItem("access_token");
 
         try {
-            const {data} = await dataProvider.custom<{ me: any}>({
+            const { data } = await dataProvider.custom<{ me: any }>({
                 url: API_URL,
                 method: "post",
                 headers: accessToken
-                ?  {
-                     //send the access tokenToken in the authorization header
-                     Authorization: `Bearer ${accessToken}`,
-                     }
-                : {},
-            meta: {
-                //get the user information such as name, email, etc
-                rawQuery: `
-                    query Me {
-                        me {
-                            id 
-                            name 
-                            email
-                            phone
-                            jobTitle
-                            timezone
-                            avatarUrl
+                    ? {
+                          //send the access token in the authorization header
+                          Authorization: `Bearer ${accessToken}`,
+                      }
+                    : {},
+                meta: {
+                    //get the user information such as name, email, etc
+                    rawQuery: `
+                        query Me {
+                            me {
+                                id
+                                name
+                                email
+                                phone
+                                jobTitle
+                                timezone
+                                avatarUrl
+                            }
                         }
-                    }
-                `,
-            },
+                    `,
+                },
             });
-         return data.me;
-        } catch(error) {
+
+            return data.me;
+
+        } catch (error) {
             return undefined;
         }
     },

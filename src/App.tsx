@@ -111,18 +111,10 @@ function App() {
               <Routes>
                 <Route index element={<WelcomePage />} />
                 <Route path="/Home"  element={<Home />} />
-                <Route
-                  path="/forgot-password"
-                  element={<ForgotPassword />}
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/register" element={<Register />}
                 />
-                <Route
-                  path="/register"
-                  element={<Register />}
-                />
-                <Route
-                  path="/login"
-                  element={<Login />}
-                />
+                <Route path="/login" element={<Login />} />
               </Routes>
 
               <RefineKbar />
