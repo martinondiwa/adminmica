@@ -49,6 +49,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  Outlet,
 } from "react-router";
 
 import {
@@ -64,6 +65,7 @@ import {
   CategoryList,
   CategoryShow,
 } from "./pages/categories";
+import Layout from "./components/layout";
 
 function App() {
   return (
@@ -109,17 +111,23 @@ function App() {
               }}
             >
               <Routes>
-                <Route index element={<WelcomePage />} />
                 <Route path="/Home"  element={<Home />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/register" element={<Register />}
                 />
                 <Route path="/login" element={<Login />} />
                 <Route
-                element={<Authenticated
-                  key="authenticated-layout"
-                  fallback={< CatchAllNavigate to="/login"/>}
-                />} />
+                    element={
+                    <Authenticated
+                      key="authenticated-layout"
+                      fallback={< CatchAllNavigate to="/login"/>}
+                    >
+                   <Layout>
+                    <Outlet/>
+                  </Layout> 
+               </Authenticated>
+               }>
+                <Route/>
               </Routes>
 
               <RefineKbar />
