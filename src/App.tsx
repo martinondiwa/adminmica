@@ -115,6 +115,11 @@ function App() {
                 <Route path="/register" element={<Register />}
                 />
                 <Route path="/login" element={<Login />} />
+                <Route
+                element={<Authenticated
+                  key="authenticated-layout"
+                  fallback={< CatchAllNavigate to="/login"/>}
+                />} />
               </Routes>
 
               <RefineKbar />
