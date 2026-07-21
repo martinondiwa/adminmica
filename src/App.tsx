@@ -111,24 +111,33 @@ function App() {
               }}
             >
               <Routes>
-     
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/register" element={<Register />}
-                />
-                <Route path="/login" element={<Login />} />
-               <Route
-                element={
-                  <Authenticated
-                    key="authenticated-layout"
-                    fallback={<CatchAllNavigate to="/login" />}
-                >
-                    <Layout>
-                       <Outlet />
-                     </Layout>
-                    </Authenticated>
-                    }>
-                   <Route index element={<Home />} />
+                  <Route
+                  element={
+                      <Authenticated
+                          key="authenticated-layout"
+                          fallback={<CatchAllNavigate to="/login" />}
+                      >
+                          <Layout>
+                              <Outlet />
+                          </Layout>
+                      </Authenticated>
+                    } >
+                  <Route index element={<NavigateToResource resource="blog_posts" />} />
+
+                  <Route path="/blog-posts">
+                      <Route index element={<BlogPostList />} />
+                      <Route path="create" element={<BlogPostCreate />} />
+                      <Route path="edit/:id" element={<BlogPostEdit />} />
+                      <Route path="show/:id" element={<BlogPostShow />} />
                   </Route>
+
+                  <Route path="/categories">
+                      <Route index element={<CategoryList />} />
+                      <Route path="create" element={<CategoryCreate />} />
+                      <Route path="edit/:id" element={<CategoryEdit />} />
+                      <Route path="show/:id" element={<CategoryShow />} />
+                  </Route>
+          </Route>
               </Routes>
               <RefineKbar />
               <UnsavedChangesNotifier />
