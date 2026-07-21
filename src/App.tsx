@@ -116,21 +116,20 @@ function App() {
                 <Route path="/register" element={<Register />}
                 />
                 <Route path="/login" element={<Login />} />
-                <Route
-                    element={
-                    <Authenticated
-                      key="authenticated-layout"
-                      fallback={< CatchAllNavigate to="/login"/>}
+               <Route
+                element={
+                  <Authenticated
+                    key="authenticated-layout"
+                    fallback={<CatchAllNavigate to="/login" />}
                 >
-                   <Layout>
-                    <Outlet/>
-                  </Layout> 
-               </Authenticated>
-               }>
-                 <Route path="/Home"  element={<Home />} />
-                <Route/>
+                    <Layout>
+                       <Outlet />
+                     </Layout>
+                    </Authenticated>
+                    }>
+                   <Route index element={<Home />} />
+                  </Route>
               </Routes>
-
               <RefineKbar />
               <UnsavedChangesNotifier />
               <DocumentTitleHandler />

@@ -1,14 +1,10 @@
-import {AuthBindings} from "@refinedev/core";
+import { AuthBindings } from "@refinedev/core";
+import { API_URL, dataProvider } from "./data";
 
-import {API_URL, dataProvider} from "./data";
-import { Login } from "../pages/login";
-import { redirect } from "react-router";
-import { message } from "antd";
-
-//For demo purposes
+// For demo purposes
 export const authCredentials = {
-  email: "demo@refine.dev",
-  password: "demodemo",
+    email: "demo@refine.dev",
+    password: "demodemo",
 };
 
 export const authProvider: AuthBindings = {
@@ -21,12 +17,17 @@ export const authProvider: AuthBindings = {
                 meta: {
                     variables: {
                         email,
+                        password,
                     },
                     rawQuery: `
-                        mutation Login($email: String!) {
+                        mutation Login(
+                            $email: String!
+                            $password: String!
+                        ) {
                             login(
                                 loginInput: {
                                     email: $email
+                                    password: $password
                                 }
                             ) {
                                 accessToken
@@ -36,9 +37,11 @@ export const authProvider: AuthBindings = {
                 },
             });
 
+            const accessToken = data.login.accessToken;
+
             localStorage.setItem(
                 "access_token",
-                data.login.accessToken
+                accessToken
             );
 
             return {
@@ -51,19 +54,13 @@ export const authProvider: AuthBindings = {
             return {
                 success: false,
                 error: {
-                    message:
-                        "message" in error
-                            ? error.message
-                            : "Login failed",
-                    name:
-                        "name" in error
-                            ? error.name
-                            : "Invalid email or password",
+                    message: error.message || "Login failed",
+                    name: error.name || "Invalid email or password",
                 },
             };
         }
     },
-    //Simply remove the accessToken from localStorage for the logout
+
     logout: async () => {
         localStorage.removeItem("access_token");
 
@@ -74,8 +71,6 @@ export const authProvider: AuthBindings = {
     },
 
     onError: async (error) => {
-        //This is a check to see if the error is an authentication error
-        //if so, set logout to true
         if (error.statusCode === "UNAUTHENTICATED") {
             return {
                 logout: true,
@@ -83,17 +78,28 @@ export const authProvider: AuthBindings = {
             };
         }
 
-        return { error };
+        return {
+            error,
+        };
     },
 
-    //used to get the identity of the user
-    //this is to know if the user is authenticated or not
     check: async () => {
+        const accessToken = localStorage.getItem("access_token");
+
+        if (!accessToken) {
+            return {
+                authenticated: false,
+                redirectTo: "/login",
+            };
+        }
+
         try {
             await dataProvider.custom({
                 url: API_URL,
                 method: "post",
-                headers: {},
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
                 meta: {
                     rawQuery: `
                         query Me {
@@ -105,37 +111,45 @@ export const authProvider: AuthBindings = {
                 },
             });
 
-            //if the user is authenticated, redirect to the home page
             return {
                 authenticated: true,
-                redirectTo: "/",
             };
-
         } catch (error) {
-            //for any other error, redirect to the login page
+            localStorage.removeItem("access_token");
+
             return {
                 authenticated: false,
                 redirectTo: "/login",
+                logout: true,
             };
         }
     },
 
-    //get the user information
     getIdentity: async () => {
         const accessToken = localStorage.getItem("access_token");
 
+        if (!accessToken) {
+            return undefined;
+        }
+
         try {
-            const { data } = await dataProvider.custom<{ me: any }>({
+            const { data } = await dataProvider.custom<{
+                me: {
+                    id: string;
+                    name: string;
+                    email: string;
+                    phone: string;
+                    jobTitle: string;
+                    timezone: string;
+                    avatarUrl: string;
+                };
+            }>({
                 url: API_URL,
                 method: "post",
-                headers: accessToken
-                    ? {
-                          //send the access token in the authorization header
-                          Authorization: `Bearer ${accessToken}`,
-                      }
-                    : {},
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
                 meta: {
-                    //get the user information such as name, email, etc
                     rawQuery: `
                         query Me {
                             me {
@@ -153,7 +167,6 @@ export const authProvider: AuthBindings = {
             });
 
             return data.me;
-
         } catch (error) {
             return undefined;
         }
