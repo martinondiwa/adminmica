@@ -3,11 +3,15 @@ import { Avatar as AntdAvatar } from "antd"
 const CustomAvatar = () => {
   return (
     <AntdAvatar
-    alt="Jonh Doe"
+    alt="Martin Sure"
     size="small"
-    style={{backgroundColor:"#87d068"}}
+    style={{backgroundColor:"#87d068",
+        display: 'flex',
+        alignItems: 'center'
+    }}
+
     >
-      JM
+      MS
     </AntdAvatar>
   )
 }
