@@ -1,3 +1,4 @@
+import { getNameInitials } from "@/utilities";
 import { Avatar as AntdAvatar, AvatarProps } from "antd"
 
 type props = AvatarProps & {
@@ -9,7 +10,7 @@ const CustomAvatar = ({name, style, ...rest}: props) => {
     <AntdAvatar
     alt="Martin Sure"
     size="small"
-    style={{backgroundColor:"#87d068",
+    style={{backgroundColor:"#89d269fd",
         display: 'flex',
         alignItems: 'center',
         border: 'none',
@@ -17,7 +18,7 @@ const CustomAvatar = ({name, style, ...rest}: props) => {
     }}
    {...rest}
     >
-      {name}
+      {getNameInitials(name || '')}
     </AntdAvatar>
   )
 }
