@@ -111,16 +111,12 @@ function App() {
               }}
             >
               <Routes>
-
                   {/* Public routes */}
-                  <Route index element={<WelcomePage />} />
                   <Route path="/login" element={<Login />} />
-
                   <Route path="/register" element={<Register />} />
-
-                  <Route 
-                      path="/forgot-password" 
-                      element={<ForgotPassword />} 
+                  <Route
+                      path="/forgot-password"
+                      element={<ForgotPassword />}
                   />
 
                   {/* Protected routes */}
@@ -136,30 +132,28 @@ function App() {
                           </Authenticated>
                       }
                   >
+                      {/* Home page */}
+                      <Route index element={<Home />} />
 
-                      <Route 
-                          index 
-                          element={
-                              <NavigateToResource resource="blog_posts" />
-                          } 
-                      />
-                      <Route path="/blog-posts">
+                     /* {/* Blog Posts */}
+                      <Route path="blog-posts">
                           <Route index element={<BlogPostList />} />
                           <Route path="create" element={<BlogPostCreate />} />
                           <Route path="edit/:id" element={<BlogPostEdit />} />
                           <Route path="show/:id" element={<BlogPostShow />} />
                       </Route>
 
-
-                      <Route path="/categories">
+                      {/* Categories */}
+                      <Route path="categories">
                           <Route index element={<CategoryList />} />
                           <Route path="create" element={<CategoryCreate />} />
                           <Route path="edit/:id" element={<CategoryEdit />} />
                           <Route path="show/:id" element={<CategoryShow />} />
                       </Route>
-
                   </Route>
 
+                  {/* 404 */}
+                  <Route path="*" element={<ErrorComponent />} />
               </Routes>
               <RefineKbar />
               <UnsavedChangesNotifier />
