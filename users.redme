@@ -1,0 +1,58 @@
+{
+  "data": {
+    "users": {
+      "nodes": [
+        {
+          "id": "1",
+          "name": "Admin User",
+          "email": "admin.user@dundermifflin.com"
+        },
+        {
+          "id": "2",
+          "name": "Michael Scott",
+          "email": "michael.scott@dundermifflin.com"
+        },
+        {
+          "id": "3",
+          "name": "Jim Halpert",
+          "email": "jim.halpert@dundermifflin.com"
+        },
+        {
+          "id": "4",
+          "name": "Pam Beesly",
+          "email": "pam.beesly@dundermifflin.com"
+        },
+        {
+          "id": "5",
+          "name": "Dwight Schrute",
+          "email": "dwight.schrute@dundermifflin.com"
+        },
+        {
+          "id": "6",
+          "name": "Angela Martin",
+          "email": "angela.martin@dundermifflin.com"
+        },
+        {
+          "id": "7",
+          "name": "Stanley Hudson",
+          "email": "stanley.hudson@dundermifflin.com"
+        },
+        {
+          "id": "8",
+          "name": "Phyllis Smith",
+          "email": "phyllis.smith@dundermifflin.com"
+        },
+        {
+          "id": "9",
+          "name": "Kevin Malone",
+          "email": "kevin.malone@dundermifflin.com"
+        },
+        {
+          "id": "10",
+          "name": "Oscar Martinez",
+          "email": "oscar.martinez@dundermifflin.com"
+        }
+      ]
+    }
+  }
+}
