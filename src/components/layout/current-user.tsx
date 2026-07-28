@@ -1,5 +1,6 @@
 import { Popover, Button } from "antd";
 import React from "react";
+import CustomAvatar from "../custom-avatar";
 
 const CurrentUser = () => {
     return (
@@ -10,7 +11,7 @@ const CurrentUser = () => {
             overlayInnerStyle={{ padding: 0 }}
             overlayStyle={{ zIndex: 999 }}
         >
-            <Button type="text">TEST</Button>
+            <CustomAvatar/>
         </Popover>
     );
 };
