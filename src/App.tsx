@@ -50,7 +50,7 @@ import {
   Routes,
   Route,
   Outlet,
-} from "react-router";
+} from "react-router-dom";
 
 import {
   BlogPostCreate,
@@ -111,33 +111,55 @@ function App() {
               }}
             >
               <Routes>
+
+                  {/* Public routes */}
+                  <Route index element={<WelcomePage />} />
+                  <Route path="/login" element={<Login />} />
+
+                  <Route path="/register" element={<Register />} />
+
+                  <Route 
+                      path="/forgot-password" 
+                      element={<ForgotPassword />} 
+                  />
+
+                  {/* Protected routes */}
                   <Route
-                  element={
-                      <Authenticated
-                          key="authenticated-layout"
-                          fallback={<CatchAllNavigate to="/login" />}
-                      >
-                          <Layout>
-                              <Outlet />
-                          </Layout>
-                      </Authenticated>
-                    } >
-                  <Route index element={<NavigateToResource resource="blog_posts" />} />
+                      element={
+                          <Authenticated
+                              key="authenticated-layout"
+                              fallback={<CatchAllNavigate to="/login" />}
+                          >
+                              <Layout>
+                                  <Outlet />
+                              </Layout>
+                          </Authenticated>
+                      }
+                  >
 
-                  <Route path="/blog-posts">
-                      <Route index element={<BlogPostList />} />
-                      <Route path="create" element={<BlogPostCreate />} />
-                      <Route path="edit/:id" element={<BlogPostEdit />} />
-                      <Route path="show/:id" element={<BlogPostShow />} />
+                      <Route 
+                          index 
+                          element={
+                              <NavigateToResource resource="blog_posts" />
+                          } 
+                      />
+                      <Route path="/blog-posts">
+                          <Route index element={<BlogPostList />} />
+                          <Route path="create" element={<BlogPostCreate />} />
+                          <Route path="edit/:id" element={<BlogPostEdit />} />
+                          <Route path="show/:id" element={<BlogPostShow />} />
+                      </Route>
+
+
+                      <Route path="/categories">
+                          <Route index element={<CategoryList />} />
+                          <Route path="create" element={<CategoryCreate />} />
+                          <Route path="edit/:id" element={<CategoryEdit />} />
+                          <Route path="show/:id" element={<CategoryShow />} />
+                      </Route>
+
                   </Route>
 
-                  <Route path="/categories">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
-                  </Route>
-          </Route>
               </Routes>
               <RefineKbar />
               <UnsavedChangesNotifier />

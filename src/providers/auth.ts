@@ -1,66 +1,64 @@
-import { AuthBindings } from "@refinedev/core";
-import { API_URL, dataProvider } from "./data";
+import {AuthBindings} from "@refinedev/core";
 
-// For demo purposes
+import {API_URL, dataProvider} from "./data";
+import { Login } from "../pages/login";
+import { redirect } from "react-router";
+import { message } from "antd";
+
+//For demo purposes
 export const authCredentials = {
-    email: "demo@refine.dev",
-    password: "demodemo",
+  email: "demo@refine.dev",
+  password: "demodemo",
 };
 
 export const authProvider: AuthBindings = {
-    login: async ({ email, password }) => {
-        try {
-            const { data } = await dataProvider.custom({
-                url: API_URL,
-                method: "post",
-                headers: {},
-                meta: {
-                    variables: {
-                        email,
-                        password,
-                    },
-                    rawQuery: `
-                        mutation Login(
-                            $email: String!
-                            $password: String!
+   login: async ({ email, password }) => {
+    try {
+        const { data } = await dataProvider.custom({
+            url: API_URL,
+            method: "post",
+            headers: {},
+            meta: {
+                variables: {
+                    email,
+                    password,
+                },
+                rawQuery: `
+                    mutation Login($email: String!, $password: String!) {
+                        login(
+                            email: $email
+                            password: $password
                         ) {
-                            login(
-                                loginInput: {
-                                    email: $email
-                                    password: $password
-                                }
-                            ) {
-                                accessToken
-                            }
+                            accessToken
                         }
-                    `,
-                },
-            });
+                    }
+                `,
+            },
+        });
 
-            const accessToken = data.login.accessToken;
+        localStorage.setItem(
+            "access_token",
+            data.login.accessToken
+        );
 
-            localStorage.setItem(
-                "access_token",
-                accessToken
-            );
+        return {
+            success: true,
+            redirectTo: "/",
+        };
 
-            return {
-                success: true,
-                redirectTo: "/",
-            };
-        } catch (e) {
-            const error = e as Error;
+    } catch (e) {
+        const error = e as Error;
 
-            return {
-                success: false,
-                error: {
-                    message: error.message || "Login failed",
-                    name: error.name || "Invalid email or password",
-                },
-            };
-        }
-    },
-
+        return {
+            success: false,
+            error: {
+                message: error.message || "Login failed",
+                name: "Invalid email or password",
+            },
+        };
+    }
+  },
+    //Simply remove the accessToken from localStorage for the logout
     logout: async () => {
         localStorage.removeItem("access_token");
 
@@ -71,6 +69,8 @@ export const authProvider: AuthBindings = {
     },
 
     onError: async (error) => {
+        //This is a check to see if the error is an authentication error
+        //if so, set logout to true
         if (error.statusCode === "UNAUTHENTICATED") {
             return {
                 logout: true,
@@ -78,78 +78,69 @@ export const authProvider: AuthBindings = {
             };
         }
 
+        return { error };
+    },
+
+    //used to get the identity of the user
+    //this is to know if the user is authenticated or not
+   check: async () => {
+    const accessToken = localStorage.getItem("access_token");
+
+    if (!accessToken) {
         return {
-            error,
+            authenticated: false,
+            redirectTo: "/login",
         };
-    },
+    }
 
-    check: async () => {
-        const accessToken = localStorage.getItem("access_token");
-
-        if (!accessToken) {
-            return {
-                authenticated: false,
-                redirectTo: "/login",
-            };
-        }
-
-        try {
-            await dataProvider.custom({
-                url: API_URL,
-                method: "post",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                meta: {
-                    rawQuery: `
-                        query Me {
-                            me {
-                                name
-                            }
+    try {
+        await dataProvider.custom({
+            url: API_URL,
+            method: "post",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            meta: {
+                rawQuery: `
+                    query Me {
+                        me {
+                            name
                         }
-                    `,
-                },
-            });
+                    }
+                `,
+            },
+        });
 
-            return {
-                authenticated: true,
-            };
-        } catch (error) {
-            localStorage.removeItem("access_token");
+        return {
+            authenticated: true,
+        };
+    } catch (error) {
+        localStorage.removeItem("access_token");
 
-            return {
-                authenticated: false,
-                redirectTo: "/login",
-                logout: true,
-            };
-        }
-    },
+        return {
+            authenticated: false,
+            redirectTo: "/login",
+            logout: true,
+        };
+    }
+},
 
+    //get the user information
     getIdentity: async () => {
         const accessToken = localStorage.getItem("access_token");
 
-        if (!accessToken) {
-            return undefined;
-        }
-
         try {
-            const { data } = await dataProvider.custom<{
-                me: {
-                    id: string;
-                    name: string;
-                    email: string;
-                    phone: string;
-                    jobTitle: string;
-                    timezone: string;
-                    avatarUrl: string;
-                };
-            }>({
+            const { data } = await dataProvider.custom<{ me: any }>({
                 url: API_URL,
                 method: "post",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
+                headers: accessToken
+                    ? {
+                          //send the access token in the authorization header
+                          Authorization: `Bearer ${accessToken}`,
+                      }
+                    : {},
                 meta: {
+                    //get the user information such as name, email, etc
                     rawQuery: `
                         query Me {
                             me {
@@ -167,6 +158,7 @@ export const authProvider: AuthBindings = {
             });
 
             return data.me;
+
         } catch (error) {
             return undefined;
         }
