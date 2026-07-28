@@ -110,51 +110,61 @@ function App() {
                 liveMode: "auto",
               }}
             >
-              <Routes>
-                  {/* Public routes */}
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route
-                      path="/forgot-password"
-                      element={<ForgotPassword />}
-                  />
+          <Routes>
 
-                  {/* Protected routes */}
-                  <Route
-                      element={
-                          <Authenticated
-                              key="authenticated-layout"
-                              fallback={<CatchAllNavigate to="/login" />}
-                          >
-                              <Layout>
-                                  <Outlet />
-                              </Layout>
-                          </Authenticated>
-                      }
-                  >
-                      {/* Home page */}
-                      <Route index element={<Home />} />
+              {/* Public routes */}
+              <Route path="/login" element={<Login />} />
 
-                     /* {/* Blog Posts */}
-                      <Route path="blog-posts">
-                          <Route index element={<BlogPostList />} />
-                          <Route path="create" element={<BlogPostCreate />} />
-                          <Route path="edit/:id" element={<BlogPostEdit />} />
-                          <Route path="show/:id" element={<BlogPostShow />} />
-                      </Route>
+              <Route path="/register" element={<Register />} />
 
-                      {/* Categories */}
-                      <Route path="categories">
-                          <Route index element={<CategoryList />} />
-                          <Route path="create" element={<CategoryCreate />} />
-                          <Route path="edit/:id" element={<CategoryEdit />} />
-                          <Route path="show/:id" element={<CategoryShow />} />
-                      </Route>
+              <Route
+                  path="/forgot-password"
+                  element={<ForgotPassword />}
+              />
+
+
+              {/* Protected routes */}
+              <Route
+                  element={
+                      <Authenticated
+                          key="authenticated-layout"
+                          fallback={<CatchAllNavigate to="/login" />}
+                      >
+                          <Layout>
+                              <Outlet />
+                          </Layout>
+                      </Authenticated>
+                  }
+              >
+
+                  {/* Home page */}
+                  <Route index element={<Home />} />
+
+
+                  {/* Blog Posts */}
+                  <Route path="blog-posts">
+                      <Route index element={<BlogPostList />} />
+                      <Route path="create" element={<BlogPostCreate />} />
+                      <Route path="edit/:id" element={<BlogPostEdit />} />
+                      <Route path="show/:id" element={<BlogPostShow />} />
                   </Route>
 
-                  {/* 404 */}
-                  <Route path="*" element={<ErrorComponent />} />
-              </Routes>
+
+                  {/* Categories */}
+                  <Route path="categories">
+                      <Route index element={<CategoryList />} />
+                      <Route path="create" element={<CategoryCreate />} />
+                      <Route path="edit/:id" element={<CategoryEdit />} />
+                      <Route path="show/:id" element={<CategoryShow />} />
+                  </Route>
+
+              </Route>
+
+
+    {/* 404 */}
+    <Route path="*" element={<ErrorComponent />} />
+
+</Routes>
               <RefineKbar />
               <UnsavedChangesNotifier />
               <DocumentTitleHandler />
