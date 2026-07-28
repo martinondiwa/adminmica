@@ -1,17 +1,22 @@
-import { Avatar as AntdAvatar } from "antd"
+import { Avatar as AntdAvatar, AvatarProps } from "antd"
 
-const CustomAvatar = () => {
+type props = AvatarProps & {
+    name: string;
+}
+
+const CustomAvatar = ({name, style, ...rest}: props) => {
   return (
     <AntdAvatar
     alt="Martin Sure"
     size="small"
     style={{backgroundColor:"#87d068",
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        border: 'none'
     }}
 
     >
-      MS
+      {name}
     </AntdAvatar>
   )
 }
