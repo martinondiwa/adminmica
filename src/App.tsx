@@ -1,160 +1,87 @@
-import {
-  Authenticated,
-  GitHubBanner,
-  Refine,
-  WelcomePage,
-} from "@refinedev/core";
+import { Authenticated, GitHubBanner, Refine, WelcomePage } from "@refinedev/core";
+import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
+import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
-import {
-  DevtoolsPanel,
-  DevtoolsProvider,
-} from "@refinedev/devtools";
-
-import {
-  RefineKbar,
-  RefineKbarProvider,
-} from "@refinedev/kbar";
-
-import {
-  ErrorComponent,
-  ThemedLayout,
-  ThemedSider,
-  useNotificationProvider,
-} from "@refinedev/antd";
-
+import { useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
-import {
-  authProvider,
-  dataProvider,
-  liveProvider,
-} from "./providers";
+import { authProvider, dataProvider, liveProvider } from "./providers";
+import { Home, ForgotPassword, Login, Register, CompanyList } from "./pages";
 
-import {
-  Home,
-  ForgotPassword,
-  Login,
-  Register,
-} from "./pages";
-
-import routerProvider, {
+import routerBindings, {
   CatchAllNavigate,
   DocumentTitleHandler,
-  NavigateToResource,
   UnsavedChangesNotifier,
-} from "@refinedev/react-router";
-
+} from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Outlet,
-} from "react-router-dom";
-
-import {
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostList,
-  BlogPostShow,
-} from "./pages/blog-posts";
-
-import {
-  CategoryCreate,
-  CategoryEdit,
-  CategoryList,
-  CategoryShow,
-} from "./pages/categories";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout";
+import { resources } from "./config/resources";
+import Create from "./pages/company/create";
+import Edit from "./pages/company/edit";
+import List from "./pages/tasks/list";
+import EditTask from "./pages/tasks/edit";
+import CreateTask from "./pages/tasks/create";
 
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
-
       <RefineKbarProvider>
-        <AntdApp>
-          <DevtoolsProvider>
-            <Refine
-              dataProvider={dataProvider}
-              liveProvider={liveProvider}
-              notificationProvider={useNotificationProvider}
-              routerProvider={routerProvider}
-              authProvider={authProvider}
-              resources={[
-                {
-                  name: "blog_posts",
-                  list: "/blog-posts",
-                  create: "/blog-posts/create",
-                  edit: "/blog-posts/edit/:id",
-                  show: "/blog-posts/show/:id",
-                  meta: {
-                    canDelete: true,
-                  },
-                },
-                {
-                  name: "categories",
-                  list: "/categories",
-                  create: "/categories/create",
-                  edit: "/categories/edit/:id",
-                  show: "/categories/show/:id",
-                  meta: {
-                    canDelete: true,
-                  },
-                },
-              ]}
-              options={{
-                syncWithLocation: true,
-                warnWhenUnsavedChanges: true,
-                projectId: "gq0OXp-2hOnxQ-SnPWsB",
-                liveMode: "auto",
-              }}
-            >
-          <Routes>
-
-              {/* Public routes */}
-              <Route path="/login" element={<Login />} />
-
-              <Route path="/register" element={<Register />} />
-
-              <Route
-                  path="/forgot-password"
-                  element={<ForgotPassword />}
-              />
-
-
-              {/* Protected routes */}
-              <Route
-                  element={
-                      <Authenticated
-                          key="authenticated-layout"
-                          fallback={<CatchAllNavigate to="/login" />}
-                      >
-                          <Layout>
-                              <Outlet />
-                          </Layout>
-                      </Authenticated>
-                  }
+          <AntdApp>
+            <DevtoolsProvider>
+              <Refine
+                dataProvider={dataProvider}
+                liveProvider={liveProvider}
+                notificationProvider={useNotificationProvider}
+                routerProvider={routerBindings}
+                authProvider={authProvider}
+                resources={resources}
+                options={{
+                  syncWithLocation: true,
+                  warnWhenUnsavedChanges: true,
+                  useNewQueryKeys: true,
+                  projectId: "WVyLEd-4karEq-tItoeC",
+                  liveMode: "auto",
+                }}
               >
-
-                  {/* Home page */}
-                  <Route index element={<Home />} />
-
-              </Route>
-
-
-    {/* 404 */}
-    <Route path="*" element={<ErrorComponent />} />
-
-</Routes>
-              <RefineKbar />
-              <UnsavedChangesNotifier />
-              <DocumentTitleHandler />
-            </Refine>
-
-            <DevtoolsPanel />
-          </DevtoolsProvider>
-        </AntdApp>
+                <Routes>
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route
+                    element={
+                    <Authenticated 
+                      key="authenticated-layout"
+                      fallback={<CatchAllNavigate to="/login" />}
+                    >
+                      <Layout>
+                        <Outlet />
+                      </Layout>
+                    </Authenticated>
+                    }>
+                      <Route index element={<Home />} />
+                      <Route path="/companies" >
+                        <Route index element={<CompanyList />} />
+                        <Route path="new" element={<Create />} />
+                        <Route path="edit/:id" element={<Edit />} />
+                      </Route>
+                      <Route path="/tasks" element={
+                        <List>
+                          <Outlet />
+                        </List>
+                      }>
+                        <Route path="new" element={<CreateTask />} />
+                        <Route path="edit/:id" element={<EditTask />} />
+                      </Route>
+                  </Route>
+                </Routes>
+                <RefineKbar />
+                <UnsavedChangesNotifier />
+                <DocumentTitleHandler />
+              </Refine>
+              <DevtoolsPanel />
+            </DevtoolsProvider>
+          </AntdApp>
       </RefineKbarProvider>
     </BrowserRouter>
   );
