@@ -2,8 +2,8 @@ import { useForm } from "@refinedev/antd";
 import { HttpError } from "@refinedev/core";
 import { GetFields, GetVariables } from "@refinedev/nestjs-query";
 
-import MDEditor from "@uiw/react-md-editor";
-import { Button, Form, Space } from "antd";
+import { Button, DatePicker, Form, Space } from "antd";
+import dayjs from "dayjs";
 
 import { Task } from "@/graphql/schema.types";
 import {
@@ -15,12 +15,12 @@ import { UPDATE_TASK_MUTATION } from "@/graphql/mutations";
 
 type Props = {
   initialValues: {
-    description?: Task["description"];
+    dueDate?: Task["dueDate"];
   };
   cancelForm: () => void;
 };
 
-export const DescriptionForm = ({ initialValues, cancelForm }: Props) => {
+export const DueDateForm = ({ initialValues, cancelForm }: Props) => {
   // use the useForm hook to manage the form
   // formProps contains all the props that we need to pass to the form (initialValues, onSubmit, etc.)
   // saveButtonProps contains all the props that we need to pass to the save button
@@ -35,11 +35,11 @@ export const DescriptionForm = ({ initialValues, cancelForm }: Props) => {
      * Type -> the type from which we want to pick the properties
      * Keys -> the properties that we want to pick
      */
-    Pick<GetVariables<UpdateTaskMutationVariables>, "description">
+    Pick<GetVariables<UpdateTaskMutationVariables>, "dueDate">
   >({
     queryOptions: {
-      // we are disabling the query because we don't want to fetch the data on component mount.
-      enabled: false, // disable the query
+      // disable the query to prevent fetching data on component mount
+      enabled: false,
     },
     redirect: false, // disable redirection
     // when the mutation is successful, call the cancelForm function to close the form
@@ -53,29 +53,40 @@ export const DescriptionForm = ({ initialValues, cancelForm }: Props) => {
   });
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
       <Form {...formProps} initialValues={initialValues}>
-        <Form.Item noStyle name="description">
-          <MDEditor preview="edit" data-color-mode="light" height={250} />
+        <Form.Item
+          noStyle
+          name="dueDate"
+          getValueProps={(value) => {
+            if (!value) return { value: undefined };
+            return { value: dayjs(value) };
+          }}
+        >
+          <DatePicker
+            format="YYYY-MM-DD HH:mm"
+            showTime={{
+              showSecond: false,
+              format: "HH:mm",
+            }}
+            style={{ backgroundColor: "#fff" }}
+          />
         </Form.Item>
       </Form>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "end",
-          marginTop: "12px",
-        }}
-      >
-        <Space>
-          <Button type="default" onClick={cancelForm}>
-            Cancel
-          </Button>
-          <Button {...saveButtonProps} type="primary">
-            Save
-          </Button>
-        </Space>
-      </div>
-    </>
+      <Space>
+        <Button type="default" onClick={cancelForm}>
+          Cancel
+        </Button>
+        <Button {...saveButtonProps} type="primary">
+          Save
+        </Button>
+      </Space>
+    </div>
   );
 };
