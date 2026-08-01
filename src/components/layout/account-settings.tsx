@@ -35,7 +35,7 @@ export const AccountSettings = ({ opened, setOpened, userId }: Props) => {
    * formProps -> It's an instance of HTML form that manages form state and actions like onFinish, onValuesChange, etc.
    * https://refine.dev/docs/ui-integrations/ant-design/hooks/use-form/#form
    *
-   * queryResult -> contains the result of the query. For example, isLoading, data, error, etc.
+   * queryResult -> contains the result of the query. For instance, isLoading, data, error, etc.
    * https://refine.dev/docs/packages/react-hook-form/use-form/#queryresult
    */
   const { saveButtonProps, formProps, queryResult } = useForm<
